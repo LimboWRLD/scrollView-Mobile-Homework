@@ -2,6 +2,8 @@ package com.example.scrollview;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.activity.EdgeToEdge;
@@ -12,6 +14,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class IzmeniDodaj extends AppCompatActivity {
 
+    int position = -1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,21 +26,39 @@ public class IzmeniDodaj extends AppCompatActivity {
             return insets;
         });
 
+        EditText ime = findViewById(R.id.imeInput);
+        EditText prezime = findViewById(R.id.prezimeInput);
+        EditText tel = findViewById(R.id.telInput);
+        EditText skype = findViewById(R.id.skypeInput);
         Intent intent = getIntent();
         if (intent != null && intent.getExtras() != null) {
 
-            EditText ime = findViewById(R.id.imeInput);
             ime.setText(intent.getStringExtra("ime"));
 
-            EditText prezime = findViewById(R.id.prezimeInput);
             prezime.setText(intent.getStringExtra("prezime"));
 
-            EditText tel = findViewById(R.id.telInput);
             tel.setText(intent.getStringExtra("telefon"));
 
-            EditText skype = findViewById(R.id.skypeInput);
             skype.setText(intent.getStringExtra("skype"));
 
+            position = intent.getIntExtra("position", -1);
         }
+
+        Button saveBtn = findViewById(R.id.sacuvajBtn);
+
+        saveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent rezultat = new Intent();
+                rezultat.putExtra("ime", ime.getText().toString());
+                rezultat.putExtra("prezime", prezime.getText().toString());
+                rezultat.putExtra("telefon", tel.getText().toString());
+                rezultat.putExtra("skype", skype.getText().toString());
+                rezultat.putExtra("position", position);
+                //System.out.println(ime.getText());
+                setResult(RESULT_OK, rezultat);
+                finish();
+            }
+        });
     }
 }
